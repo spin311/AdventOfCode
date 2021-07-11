@@ -1,6 +1,6 @@
 # Default ignored files
-.Result
-.Resultb
+.Result.txt
+.Resultb.txt
 /shelf/
 /workspace.xml
 # Datasource local storage ignored files
