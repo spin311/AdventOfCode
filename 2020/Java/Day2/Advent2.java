@@ -1,55 +1,64 @@
 import java.util.*;
+import java.io.*;
 
 public class Advent2 {
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
 
-        int spMeja = 0;
-        int zgMeja = 0;
-        char crka;
-        int stPravilnih = 0;
+        try{
+        File obj = new File("Data2.txt");
+        File res = new File("Result.txt");
+        Scanner reader = new Scanner(obj);
+
+        int minimum = 0; //min number of letters
+        int maximum = 0; //max number of letters
+        char letter;
+        int numCorrect = 0; //number of lines that are correct
 
 
-        while(sc.hasNextLine()) {
+        while(reader.hasNextLine()) {
 
-             String a = sc.nextLine();
-            String[] tabela = a.split(":"); // vrstico razdelimo na dva dela
-            String geslo = tabela[1];
-            String mejeK = tabela[0]; //meje in koda(znak)
+            String a = reader.nextLine();
+            String[] array = a.split(":"); //split each line by ':' we get: (min-max letter) and (password)->ex: array[0]="1-3 a", array[1] ="abcde"
+            String password = array[1];
+            String limits = array[0]; //min, max + letter
 
-            String[] pomozna = mejeK.split(" "); // razdelimo na 1-3 in a
-            String[] stevila = pomozna[0].split("-");
+            String[] temp = limits.split(" "); // split onto 1-3 and a
+            String[] numbers = temp[0].split("-");
 
-            spMeja = Integer.parseInt(stevila[0]);
-            zgMeja = Integer.parseInt(stevila[1]);
-            crka = pomozna[1].charAt(0);
+            minimum = Integer.parseInt(numbers[0]);
+            maximum = Integer.parseInt(numbers[1]);
+            letter = temp[1].charAt(0);
 
-            int stevec = 0;
+            int counter = 0; //counter for correct letters in each line
 
-            for (int i = 0; i < geslo.length(); i++) {
-                if (geslo.charAt(i) == crka) stevec++;
+            for (int i = 0; i < password.length(); i++) {
+                if (password.charAt(i) == letter) counter++; 
+    
+     } 
+
+
+            if (counter >= minimum && counter <= maximum) numCorrect++; 
+            
+    }
+            try{
+                if(res.createNewFile()) {
+                    FileWriter writer = new FileWriter(res);
+                    writer.append(numCorrect + "\n");
+                    writer.close();
+                }
+
             }
-
-            if (stevec >= spMeja && stevec <= zgMeja) stPravilnih++;
-            System.out.println(stPravilnih);
+            catch(FileNotFoundException e){
+                e.printStackTrace();
+            }
+            System.out.println(numCorrect); 
+            reader.close();
         }
 
+        catch(IOException e){
+            e.printStackTrace();
+        }
 
-
-
-
-
-
-
-     /*  for(String i : tabela){
-           System.out.println(i);
-
-       }
-
-      */
     }
-
-
-
 }

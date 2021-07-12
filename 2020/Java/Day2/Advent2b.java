@@ -1,40 +1,59 @@
 import java.util.*;
+import java.io.*;
 
 public class Advent2b {
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
 
-        int prvoMesto = 0;
-        int drugoMesto = 0;
-        char crka;
-        int stPravilnih = 0;
+        try{
+            File obj = new File("Data2.txt");
+            File res = new File("Resultb.txt");
+            Scanner reader = new Scanner(obj);
+
+            int placeOne = 0;
+            int placeTwo = 0;
+            char letter;
+            int numCorrect = 0; //number of lines that are correct
 
 
-        while(sc.hasNextLine()) {
+            while(reader.hasNextLine()) {
 
-            String a = sc.nextLine();
-            String[] tabela = a.split(":"); // vrstico razdelimo na dva dela
-            String geslo = tabela[1];
-            String mejeK = tabela[0]; //meje in koda(znak)
+                String a = reader.nextLine();
+                String[] array = a.split(":"); //split each line by ':' we get: (min-max letter) and (password)->ex: array[0]="1-3 a", array[1] ="abcde"
+                String password = array[1];
+                String limits = array[0]; //min, max + letter
 
-            String[] pomozna = mejeK.split(" "); // razdelimo na 1-3 in a
-            String[] stevila = pomozna[0].split("-");
+                String[] temp = limits.split(" "); // split onto 1-3 and a
+                String[] numbers = temp[0].split("-");
 
-            prvoMesto = Integer.parseInt(stevila[0]);
-            drugoMesto = Integer.parseInt(stevila[1]);
-            crka = pomozna[1].charAt(0);
+                placeOne = Integer.parseInt(numbers[0]);
+                placeTwo = Integer.parseInt(numbers[1]);
+                letter = temp[1].charAt(0);
+                //check if exactly one of the letters at places placeOne and placeTwo is the same as char 'letter'
+                if((letter == password.charAt(placeOne) && letter != password.charAt(placeTwo))
+                        || letter == password.charAt(placeTwo) && letter != password.charAt(placeOne) ) numCorrect++;
+            }
 
-            if((crka == geslo.charAt(prvoMesto) && crka != geslo.charAt(drugoMesto))
-                    || crka == geslo.charAt(drugoMesto) && crka != geslo.charAt(prvoMesto) ) stPravilnih++;
-            System.out.println(stPravilnih);
+            try{
+
+                if(res.createNewFile()) {
+                    FileWriter writer = new FileWriter(res);
+                    writer.append(numCorrect + "\n");
+                    writer.close();
+                }
+            }
+            catch(FileNotFoundException e) {
+                e.printStackTrace();
+
+            }
+        System.out.println(numCorrect);
+        reader.close();
         }
 
-
-
-
-
-
+        catch(IOException e){
+            e.printStackTrace();
+        }
+ 
     }
 
 
